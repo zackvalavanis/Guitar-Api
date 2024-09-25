@@ -1,6 +1,8 @@
 class GuitarsController < ApplicationController
+  before_action :authenticate_user  # This will ensure that all actions require authentication
+
   def index 
-    @guitars = Guitar.all 
+    @guitars = current_user.guitars
     render :index
   end
 
@@ -14,7 +16,7 @@ class GuitarsController < ApplicationController
       name: params[:name], 
       year: params[:year], 
       price: params[:price],
-      user_id: params[:user_id]
+      user_id: current_user.id
     )
     @guitar.save
     render :show
@@ -26,7 +28,7 @@ class GuitarsController < ApplicationController
       name: params[:name] || @guitar.name,
       year: params[:year] || @guitar.year,
       price: params[:price] || @guitar.price,
-      user_id: params[:user_id] || @guitar.user_id,
+      user_id: current_user.id
     )
     render :show
   end 
